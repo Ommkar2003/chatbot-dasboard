@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Green Fields – Chatbot Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #0f2a44;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      margin-top: 20px;
+    }
+
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      font-size: 14px;
+      vertical-align: top;
+    }
+
+    th {
+      background: #0f2a44;
+      color: #fff;
+      text-align: left;
+    }
+
+    tr:hover {
+      background: #f1f1f1;
+    }
+
+    .lead {
+      font-weight: bold;
+      color: green;
+    }
+
+    .ai {
+      color: #333;
+    }
+
+    .listing {
+      color: #0f2a44;
+      font-weight: bold;
+    }
+
+    .time {
+      font-size: 12px;
+      color: #666;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>📊 Green Fields Chatbot Dashboard</h1>
+<p>Leads & Conversations (latest first)</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Time</th>
+      <th>User Message</th>
+      <th>Bot Reply</th>
+      <th>Source</th>
+      <th>Lead Contact</th>
+    </tr>
+  </thead>
+  <tbody id="rows"></tbody>
+</table>
+
+<script>
+const API_URL = "https://greenfields-chatbot1.onrender.com/admin/chats"; // 🔴 CHANGE IF NEEDED
+
+async function loadChats() {
+  try {
+    const res = await fetch(API_URL);
+    const data = await res.json();
+
+    const rows = document.getElementById("rows");
+    rows.innerHTML = "";
+
+    data.forEach(chat => {
+      const tr = document.createElement("tr");
+
+      tr.innerHTML = `
+        <td class="time">${new Date(chat.createdAt).toLocaleString()}</td>
+        <td>${chat.userMessage || "-"}</td>
+        <td>${chat.botReply || "-"}</td>
+        <td class="${chat.source}">${chat.source}</td>
+        <td class="lead">${chat.leadContact || "-"}</td>
+      `;
+
+      rows.appendChild(tr);
+    });
+
+  } catch (err) {
+    alert("Failed to load data");
+  }
+}
+
+loadChats();
+</script>
+
+</body>
+</html>
